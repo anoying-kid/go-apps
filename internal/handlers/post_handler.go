@@ -7,6 +7,7 @@ import (
 
 	"github.com/anoying-kid/go-apps/blogAPI/internal/models"
 	"github.com/anoying-kid/go-apps/blogAPI/internal/repository"
+	"github.com/anoying-kid/go-apps/blogAPI/pkg/middleware"
 	"github.com/gorilla/mux"
 )
 
@@ -24,18 +25,24 @@ type CreatePostRequest struct {
 }
 
 func (h *PostHandler) Create(w http.ResponseWriter, r *http.Request) {
+    // Get user ID from context
+    userID, ok := r.Context().Value(middleware.UserIDKey).(int64)
+    if !ok {
+        http.Error(w, "Unauthorized", http.StatusUnauthorized)
+        return
+    }
 	var req CreatePostRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	authorID := int64(1)
+	// authorID := int64(1) // Replace with actual author ID
 	
 	post := &models.Post{
 		Title:     req.Title,
 		Body:      req.Body,
-		AuthorID:  authorID,
+		AuthorID:  userID,
 	}
 
 	if err := h.postRepo.Create(post); err != nil {

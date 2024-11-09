@@ -7,6 +7,7 @@ import (
 
 	"github.com/anoying-kid/go-apps/blogAPI/internal/handlers"
 	"github.com/anoying-kid/go-apps/blogAPI/internal/repository"
+	"github.com/anoying-kid/go-apps/blogAPI/pkg/middleware"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
@@ -35,8 +36,11 @@ func main(){
 
 	// Setup router
 	r := mux.NewRouter()
+
 	r.HandleFunc("/api/register", userHandler.Register).Methods("POST")
-	r.HandleFunc("/api/posts", postHandler.Create).Methods("POST")
+	r.HandleFunc("/api/login", userHandler.Login).Methods("POST")
+	// Protect routes with middleware
+	r.HandleFunc("/api/posts", middleware.AuthMiddleware(postHandler.Create)).Methods("POST")
     r.HandleFunc("/api/posts/{id}", postHandler.Get).Methods("GET")
     r.HandleFunc("/api/posts", postHandler.List).Methods("GET")
 

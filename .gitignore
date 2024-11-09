@@ -1,5 +1,7 @@
 # Mac files
 .DS_STORE
 
+.vscode
+
 # Executables
 bin/
