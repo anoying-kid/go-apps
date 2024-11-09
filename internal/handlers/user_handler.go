@@ -26,25 +26,24 @@ type RegisterRequest struct {
 }
 
 func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
-    var req RegisterRequest
-    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+    var registerReq RegisterRequest
+    if err := json.NewDecoder(r.Body).Decode(&registerReq); err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
 
-    // Hash password
-    hashedPassword, err := utils.HashPassword(req.Password)
+    hashedPassword, err := utils.HashPassword(registerReq.Password)
     if err != nil {
         http.Error(w, "Error processing password", http.StatusInternalServerError)
         return
     }
 
     user := &models.User{
-        Username: req.Username,
-        Email:    req.Email,
+        Username: registerReq.Username,
+        Email:    registerReq.Email,
         Password: hashedPassword,
 		CreatedAt: time.Now().Format(time.RFC3339),
-		UpdatedAt: time.Now().Format(time.RFC3339),
+    	UpdatedAt: time.Now().Format(time.RFC3339),
     }
 
     if err := h.userRepo.Create(user); err != nil {
@@ -52,9 +51,18 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    response := map[string]interface{}{
+        "id":      user.ID,
+        "username": user.Username,
+        "email":   user.Email,
+        "message": "User created successfully",
+    }
+
     w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(http.StatusCreated)
-    json.NewEncoder(w).Encode(user)
+    if err := json.NewEncoder(w).Encode(response); err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+    }
 }
 
 type LoginRequest struct {
