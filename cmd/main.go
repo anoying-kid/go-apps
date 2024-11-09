@@ -30,9 +30,15 @@ func main(){
 	userRepo := repository.NewUserRepository(db)
 	userHandler := handlers.NewUserHandler(userRepo)
 
+	postRepo := repository.NewPostRepository(db)
+	postHandler := handlers.NewPostHandler(postRepo)
+
 	// Setup router
 	r := mux.NewRouter()
 	r.HandleFunc("/api/register", userHandler.Register).Methods("POST")
+	r.HandleFunc("/api/posts", postHandler.Create).Methods("POST")
+    r.HandleFunc("/api/posts/{id}", postHandler.Get).Methods("GET")
+    r.HandleFunc("/api/posts", postHandler.List).Methods("GET")
 
 	// Start server
 	log.Printf("Server starting on :8080")

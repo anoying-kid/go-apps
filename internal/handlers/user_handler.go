@@ -43,7 +43,7 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
         Password: hashedPassword,
     }
 
-    if err := h.userRepo.CreateUser(user); err != nil {
+    if err := h.userRepo.Create(user); err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
