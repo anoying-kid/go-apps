@@ -5,9 +5,10 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/anoying-kid/go-apps/blogAPI/internal/middleware"
 	"github.com/anoying-kid/go-apps/blogAPI/internal/models"
 	"github.com/anoying-kid/go-apps/blogAPI/internal/repository"
-	"github.com/anoying-kid/go-apps/blogAPI/pkg/middleware"
+
 	"github.com/anoying-kid/go-apps/blogAPI/pkg/utils"
 )
 

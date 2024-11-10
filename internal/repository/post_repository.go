@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 
 	"github.com/anoying-kid/go-apps/blogAPI/internal/models"
@@ -121,16 +122,17 @@ func (r *PostRepository) Update(post *models.Post) error {
         post.AuthorID,
     )
     if err != nil {
-        return err
+        return fmt.Errorf("failed to update post: %v", err)
     }
-    
-    rowsAffected, err := result.RowsAffected()
+
+    rows, err := result.RowsAffected()
     if err != nil {
-        return err
+        return fmt.Errorf("failed to get affected rows: %v", err)
     }
-    if rowsAffected == 0 {
-        return sql.ErrNoRows
+
+    if rows == 0 {
+        return fmt.Errorf("no post found with ID %d", post.ID)
     }
-    
+
     return nil
 }

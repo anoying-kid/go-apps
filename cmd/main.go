@@ -6,8 +6,9 @@ import (
 	"net/http"
 
 	"github.com/anoying-kid/go-apps/blogAPI/internal/handlers"
+	"github.com/anoying-kid/go-apps/blogAPI/internal/middleware"
 	"github.com/anoying-kid/go-apps/blogAPI/internal/repository"
-	"github.com/anoying-kid/go-apps/blogAPI/pkg/middleware"
+
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
