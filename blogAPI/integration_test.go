@@ -247,52 +247,49 @@ func TestPostOperations(t *testing.T) {
         assert.NoError(t, err)
         assert.Equal(t, postID, post.ID)
     })
-
-    // Test updating a post
-    
 }
 
-// func TestInvalidOperations(t *testing.T) {
-// 	cleanupDatabase()
+func TestInvalidOperations(t *testing.T) {
+	cleanupDatabase()
 
-// 	// Test creating post without authentication
-// 	t.Run("Create Post Without Auth", func(t *testing.T) {
-// 		post := map[string]string{
-// 			"title": "Test Post",
-// 			"body":  "This is a test post body",
-// 		}
-// 		body, _ := json.Marshal(post)
-// 		req := httptest.NewRequest("POST", "/api/posts", bytes.NewBuffer(body))
-// 		req.Header.Set("Content-Type", "application/json")
+	// Test creating post without authentication
+	t.Run("Create Post Without Auth", func(t *testing.T) {
+		post := map[string]string{
+			"title": "Test Post",
+			"body":  "This is a test post body",
+		}
+		body, _ := json.Marshal(post)
+		req := httptest.NewRequest("POST", "/api/posts", bytes.NewBuffer(body))
+		req.Header.Set("Content-Type", "application/json")
 
-// 		rr := httptest.NewRecorder()
-// 		router.ServeHTTP(rr, req)
+		rr := httptest.NewRecorder()
+		router.ServeHTTP(rr, req)
 
-// 		assert.Equal(t, http.StatusUnauthorized, rr.Code)
-// 	})
+		assert.Equal(t, http.StatusUnauthorized, rr.Code)
+	})
 
-// 	// Test invalid login
-// 	t.Run("Invalid Login", func(t *testing.T) {
-// 		user := TestUser{
-// 			Username: "nonexistent",
-// 			Password: "wrongpass",
-// 		}
-// 		body, _ := json.Marshal(user)
-// 		req := httptest.NewRequest("POST", "/api/login", bytes.NewBuffer(body))
-// 		req.Header.Set("Content-Type", "application/json")
+	// Test invalid login
+	t.Run("Invalid Login", func(t *testing.T) {
+		user := TestUser{
+			Username: "nonexistent",
+			Password: "wrongpass",
+		}
+		body, _ := json.Marshal(user)
+		req := httptest.NewRequest("POST", "/api/login", bytes.NewBuffer(body))
+		req.Header.Set("Content-Type", "application/json")
 
-// 		rr := httptest.NewRecorder()
-// 		router.ServeHTTP(rr, req)
+		rr := httptest.NewRecorder()
+		router.ServeHTTP(rr, req)
 
-// 		assert.Equal(t, http.StatusUnauthorized, rr.Code)
-// 	})
+		assert.Equal(t, http.StatusUnauthorized, rr.Code)
+	})
 
-// 	// Test getting non-existent post
-// 	t.Run("Get Non-existent Post", func(t *testing.T) {
-// 		req := httptest.NewRequest("GET", "/api/posts/99999", nil)
-// 		rr := httptest.NewRecorder()
-// 		router.ServeHTTP(rr, req)
+	// Test getting non-existent post
+	t.Run("Get Non-existent Post", func(t *testing.T) {
+		req := httptest.NewRequest("GET", "/api/posts/99999", nil)
+		rr := httptest.NewRecorder()
+		router.ServeHTTP(rr, req)
 
-// 		assert.Equal(t, http.StatusNotFound, rr.Code)
-// 	})
-// }
+		assert.Equal(t, http.StatusNotFound, rr.Code)
+	})
+}
