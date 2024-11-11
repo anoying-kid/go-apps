@@ -42,6 +42,7 @@ func main(){
 	r.HandleFunc("/api/login", userHandler.Login).Methods("POST")
 	// Protect routes with middleware
 	r.HandleFunc("/api/posts", middleware.AuthMiddleware(postHandler.Create)).Methods("POST")
+	r.HandleFunc("/api/posts/{id}", middleware.AuthMiddleware(postHandler.Update)).Methods("PUT")
     r.HandleFunc("/api/posts/{id}", postHandler.Get).Methods("GET")
     r.HandleFunc("/api/posts", postHandler.List).Methods("GET")
 
