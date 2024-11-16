@@ -5,3 +5,5 @@
 
 # Executables
 bin/
+
+.env

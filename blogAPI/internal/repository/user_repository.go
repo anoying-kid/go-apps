@@ -49,3 +49,26 @@ func (r *UserRepository) GetByEmail(email string) (*models.User, error) {
     }
     return user, err
 }
+
+func (r *UserRepository) UpdatePassword(userID int64, hashedPassword string) error {
+    query := `
+        UPDATE users 
+        SET password = $1, updated_at = $2 
+        WHERE id = $3`
+
+    result, err := r.db.Exec(query, hashedPassword, time.Now(), userID)
+    if err != nil {
+        return err
+    }
+
+    // Check if any row was affected
+    rowsAffected, err := result.RowsAffected()
+    if err != nil {
+        return err
+    }
+    if rowsAffected == 0 {
+        return sql.ErrNoRows
+    }
+
+    return nil
+}
